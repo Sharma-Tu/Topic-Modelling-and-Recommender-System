@@ -35,12 +35,16 @@ onlyfiles = [join(mypath,f) for f in listdir(mypath) if isfile(join(mypath, f))]
 
 df_list = []
 
-for f in onlyfiles:
-    if Path(f).stat().st_size < 10000000:
-        cat = re.search('Data\\\(.*)_5.json',f).group(1)
-        df_file = getDF(f)
-        df_file['category']=cat
-        df_list.append(df_file)
-        
-df = pd.concat(df_list, ignore_index = True)
+def loadDF():        
+    for f in onlyfiles:
+        if Path(f).stat().st_size < 10000000:
+            cat = re.search('Data\\\(.*)_5.json',f).group(1)
+            df_file = getDF(f)
+            df_file['category']=cat
+            df_list.append(df_file)
+            
+    df = pd.concat(df_list, ignore_index = True)
+    return(df)
 
+if __name__ == '__main__':
+    df = loadDF()
