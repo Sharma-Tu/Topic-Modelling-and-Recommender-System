@@ -15,7 +15,7 @@ from pathlib import Path
 
 ###     Load all files in a directory      ###
 
-mypath = '.\Data\\'
+mypath = './Data/'
 
 def parse(path):
   g = gzip.open(path, 'rb')
@@ -35,16 +35,17 @@ onlyfiles = [join(mypath,f) for f in listdir(mypath) if isfile(join(mypath, f))]
 
 df_list = []
 
-def loadDF():        
+def loadDF(s=1e10):        
     for f in onlyfiles:
-        if Path(f).stat().st_size < 10000000:
-            cat = re.search('Data\\\(.*)_5.json',f).group(1)
+        if Path(f).stat().st_size<s:
+            cat = re.search('Data/(.*)_5.json',f).group(1)
             df_file = getDF(f)
             df_file['category']=cat
             df_list.append(df_file)
             
-    df = pd.concat(df_list, ignore_index = True)
+    df = pd.concat(df_list, ignore_index = True, sort=False)
     return(df)
 
 if __name__ == '__main__':
     df = loadDF()
+    print(df.shape)
